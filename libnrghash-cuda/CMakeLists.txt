@@ -1,4 +1,4 @@
-find_package(CUDA REQUIRED)
+find_package(CUDA 10.0 REQUIRED)
 
 list(APPEND CUDA_NVCC_FLAGS "--ptxas-options=-v,-warn-lmem-usage")
 list(APPEND CUDA_NVCC_FLAGS "--generate-line-info")
@@ -15,26 +15,19 @@ list(APPEND CUDA_NVCC_FLAGS_DEBUG -G)
 if(COMPUTE AND (COMPUTE GREATER 0))
 	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_${COMPUTE},code=sm_${COMPUTE}")
 else()
-	set(
-		CUDA_NVCC_FLAGS
-		${CUDA_NVCC_FLAGS}
-		"-gencode arch=compute_30,code=sm_30"
-		"-gencode arch=compute_35,code=sm_35"
-		"-gencode arch=compute_50,code=sm_50"
-		"-gencode arch=compute_52,code=sm_52"
-		"-gencode arch=compute_53,code=sm_53"
-		"-gencode arch=compute_60,code=sm_60"
-		"-gencode arch=compute_61,code=sm_61"
-		"-gencode arch=compute_62,code=sm_62"
-		"-gencode arch=compute_70,code=sm_70"
-	)
-
-	if(NOT CUDA_VERSION VERSION_LESS 10)
-        set(
-            CUDA_NVCC_FLAGS
-            ${CUDA_NVCC_FLAGS}
-            "-gencode arch=compute_75,code=sm_75"
-        )
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_30,code=sm_30")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_35,code=sm_35")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_50,code=sm_50")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_52,code=sm_52")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_53,code=sm_53")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_60,code=sm_60")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_61,code=sm_61")
+	list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_62,code=sm_62")
+	if(NOT CUDA_VERSION VERSION_LESS 9.0)
+		list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_70,code=sm_70")
+	endif()
+	if(NOT CUDA_VERSION VERSION_LESS 10.0)
+		list(APPEND CUDA_NVCC_FLAGS "-gencode arch=compute_75,code=sm_75")
 	endif()
 endif()
 
